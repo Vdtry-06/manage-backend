@@ -2,7 +2,6 @@ package vdtry06.logic.springboot.manage.backend.service;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import vdtry06.logic.springboot.manage.backend.dto.EmployeeDto;
@@ -12,7 +11,6 @@ import vdtry06.logic.springboot.manage.backend.mapper.EmployeeMapper;
 import vdtry06.logic.springboot.manage.backend.repository.EmployeeRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -53,6 +51,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setEmail(updateEmployee.getEmail());
         return EmployeeMapper.mapToEmployeeDto(employeeRepository.save(employee));
     }
+
+    @Override
+    public List<EmployeeDto> searchEmployee(String keyword) {
+        List<Employee> employees = employeeRepository.findByFirstNameContaining(keyword);
+        return employees.stream().map(EmployeeMapper::mapToEmployeeDto).toList();
+    }
+
 
     @Override
     public void deleteEmployee(long employeeId) {
